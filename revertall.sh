@@ -22,7 +22,7 @@ def_colors
 #repo forall -c 'echo "\n${PWD}:";git status'
 
 # 恢复干净的代码环境
-repo forall -c 'echo "\n${PWD}:"git clean -f -d;git reset --hard HEAD'
+repo forall -c 'echo "\n${PWD}:";git clean -f -d;git reset --hard HEAD'
 
 # 恢复到3天前的代码线
 #repo forall -c 'HAHA=`git log --before="3 days" -1 --pretty=format:"%H"`;git reset --hard $HAHA'
