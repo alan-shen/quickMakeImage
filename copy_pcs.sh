@@ -63,3 +63,5 @@ echo -e "\n${bblue}Copy ${normal}${byellow}${red}${COPYPATH}${normal}${bblue} to
 # Copying....
 cp -rfv ${COPYPATH} ./
 popd
+
+echo -e "\n\n\n\n${yellow}COPY OVER...FOR PRODUCT ${red}${COPY}... ${normal}\n\n\n\n"
