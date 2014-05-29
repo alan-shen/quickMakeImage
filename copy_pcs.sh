@@ -21,47 +21,50 @@ init () {
 	PRODUCTS_LIST=( `echo $PRODUCTS` )
 }
 
+main () {
+	if [[ -z ${ANDROID_BUILD_TOP} ]]
+	then
+		echo -e "\n${red}Please set up android build env first...${normal}"
+		exit 1
+	fi
+
+	pushd ${ANDROID_BUILD_TOP}
+	# init the products list under /pcs directory...
+	i=0
+	step=1
+	echo -e "${yellow}PRODUCT LIST IN PCS${normal}:"
+	for product in ${PRODUCTS}
+	do
+		echo -e "\t[${i}] ${cyan}${product}${normal}"
+		i=`expr ${i} + ${step}`
+	done
+
+	# select which product's overlay files while be copied...
+	while :
+	do
+		if read -n 1 -p "Which key you will use?[] "
+		then
+			if ((${REPLY}>=${i}))
+			then
+				echo -e "\n${red}Wrong num...${normal}"
+				continue
+			else
+				COPY=`echo ${PRODUCTS_LIST[${REPLY}]}`
+				break
+			fi
+		fi
+	done
+
+	COPYPATH="pcs/${COPY}/overlay/*"
+	echo -e "\n${bblue}Copy ${normal}${byellow}${red}${COPYPATH}${normal}${bblue} to base code...${normal}"
+
+	# Copying....
+	cp -rfv ${COPYPATH} ./
+	popd
+
+	echo -e "\n\n\n\n${yellow}COPY OVER...FOR PRODUCT ${red}${COPY}... ${normal}\n\n\n\n"
+}
+
 def_colors
 init
-
-if [[ -z ${ANDROID_BUILD_TOP} ]]
-then
-	echo -e "\n${red}Please set up android build env first...${normal}"
-	exit 1
-fi
-
-pushd ${ANDROID_BUILD_TOP}
-# init the products list under /pcs directory...
-i=0
-step=1
-echo -e "${yellow}PRODUCT LIST IN PCS${normal}:"
-for product in ${PRODUCTS}
-do
-	echo -e "\t[${i}] ${cyan}${product}${normal}"
-	i=`expr ${i} + ${step}`
-done
-
-# select which product's overlay files while be copied...
-while :
-do
-	if read -n 1 -p "Which key you will use?[] "
-	then
-		if ((${REPLY}>=${i}))
-		then
-			echo -e "\n${red}Wrong num...${normal}"
-			continue
-		else
-			COPY=`echo ${PRODUCTS_LIST[${REPLY}]}`
-			break
-		fi
-	fi
-done
-
-COPYPATH="pcs/${COPY}/overlay/*"
-echo -e "\n${bblue}Copy ${normal}${byellow}${red}${COPYPATH}${normal}${bblue} to base code...${normal}"
-
-# Copying....
-cp -rfv ${COPYPATH} ./
-popd
-
-echo -e "\n\n\n\n${yellow}COPY OVER...FOR PRODUCT ${red}${COPY}... ${normal}\n\n\n\n"
+main
