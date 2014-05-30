@@ -1,4 +1,7 @@
 #!/bin/bash
+# 
+# Author: pengru.shen@borqs.com
+# Date  : 2013/05/02
 
 def_colors () {
         # 特性
